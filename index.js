@@ -17,7 +17,27 @@ async function run() {
         await client.connect();
         const database = client.db('babyCare');
         const productCollection = database.collection('products');
+        const userCollection = database.collection('users')
 
+        // Email Password users info
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            const result = await userCollection.insertOne(user);
+            console.log(user);
+            res.json(result)
+        })
+        // Google user info
+        app.put('/users', async (req, res) => {
+            const user = req.body;
+            const filter = { email: user.email, displayName: user.displayName }
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: user
+            };
+            const result = await userCollection.updateOne(filter, updateDoc, options);
+            console.log(user, filter)
+            res.json(result)
+        })
 
     }
     finally {
