@@ -17,7 +17,36 @@ async function run() {
         await client.connect();
         const database = client.db('babyCare');
         const productCollection = database.collection('products');
-        const userCollection = database.collection('users')
+        const userCollection = database.collection('users');
+        const reviewCollection = database.collection('reviews')
+
+        // Add users reviews
+        app.post('/reviews', async (req, res) => {
+            const comment = req.body;
+            const result = await reviewCollection.insertOne(comment);
+            console.log(result, comment)
+            res.json(result);
+        })
+        // Get users reviews
+        app.get('/reviews', async (req, res) => {
+            const cursor = reviewCollection.find({});
+            const result = await cursor.toArray();
+            console.log(result, comment)
+            res.json(result);
+        })
+        // Add Products to Database 
+        app.post('/products', async (req, res) => {
+            const product = req.body;
+            const result = await productCollection.insertOne(product);
+            res.json(result);
+        })
+
+        // GET all products
+        app.get('/products', async (req, res) => {
+            const cursor = productCollection.find({});
+            const products = await cursor.toArray();
+            res.send(products);
+        })
 
         // Email Password users info
         app.post('/users', async (req, res) => {
