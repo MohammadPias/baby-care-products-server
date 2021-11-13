@@ -95,6 +95,13 @@ async function run() {
             const result = await productCollection.findOne(filter);
             res.send(result)
         })
+        // Delete product by id
+        app.delete('/products', async (req, res) => {
+            const id = req.query.id;
+            const filter = { _id: ObjectId(id) }
+            const result = await productCollection.deleteOne(filter);
+            res.send(result)
+        })
 
         // Email Password users info add
         app.post('/users', async (req, res) => {
