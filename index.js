@@ -56,7 +56,6 @@ async function run() {
         // Get orders by email 
         app.get('/orders/:email', async (req, res) => {
             const email = req.params.email;
-            console.log(email)
             const filter = { email: email };
             const cursor = orderCollection.find(filter);
             const result = await cursor.toArray();
